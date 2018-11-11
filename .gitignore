@@ -270,3 +270,7 @@ git.properties
 .idea
 *.iml
 .factorypath
+
+#OSX
+.DS_Store
+

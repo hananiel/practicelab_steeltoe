@@ -27,7 +27,10 @@ namespace FortuneTeller.UI
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.Configure<FortuneServiceOptions>(Configuration.GetSection("fortuneService"));
+            services.AddScoped<IFortuneService, FortuneServiceClient>();
             services.AddHttpClient<IFortuneService, FortuneServiceClient>();
+           
 
             services.AddDistributedMemoryCache();
             services.AddSession();

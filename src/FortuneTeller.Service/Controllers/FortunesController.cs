@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using FortuneTeller.Service.Models;
 
 namespace FortuneTeller.Service.Controllers
 {
@@ -10,10 +13,12 @@ namespace FortuneTeller.Service.Controllers
     public class FortunesController : ControllerBase
     {
         private readonly ILogger<FortunesController> _logger;
+        private readonly IFortuneRepository _repository;
 
-        public FortunesController(ILogger<FortunesController> logger)
+        public FortunesController(ILogger<FortunesController> logger, IFortuneRepository repository)
         {
             _logger = logger;
+            _repository = repository;
         }
 
         // GET: api/fortunes/all
@@ -21,7 +26,9 @@ namespace FortuneTeller.Service.Controllers
         public async Task<List<Fortune>> AllFortunesAsync()
         {
             _logger?.LogTrace("AllFortunesAsync");
-            return await Task.FromResult(new List<Fortune>() { new Fortune() { Id = 1, Text = "Hello from FortuneController Web API!" } });
+          
+            var result =  _repository.GetAllAsync().Result.Select(x => new Fortune() {Id = x.Id, Text = x.Text}).ToList();
+            return await Task.FromResult(result);
         }
 
         // GET api/fortunes/random

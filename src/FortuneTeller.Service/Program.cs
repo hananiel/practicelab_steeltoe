@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using System;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Threading.Tasks;
+using FortuneTeller.Service.Models;
 
 namespace FortuneTeller.Service
 {
@@ -15,11 +17,26 @@ namespace FortuneTeller.Service
 
             using (var scope = host.Services.CreateScope())
             {
-
+                var services = scope.ServiceProvider;
+                var logger = services.GetRequiredService<ILogger<Program>>();
+                try
+                {
+              
+                    await SampleData.InitializeFortunesAsync(services);
+                   
+                    logger.LogInformation("Initialized Db");
+                } 
+                catch (Exception ex)
+                {
+                    
+                    logger.LogError(ex, "An error occurred while migrating the database.");
+                }
             }
-
+          
             host.Run();
         }
+
+       
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {

@@ -1,7 +1,10 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace FortuneTeller.UI.Services
 {
@@ -9,6 +12,7 @@ namespace FortuneTeller.UI.Services
     {
         private readonly ILogger<FortuneServiceClient> _logger;
         private IOptions<FortuneServiceOptions> _config;
+        private HttpClient _httpClient;
 
         private FortuneServiceOptions Config
         {
@@ -19,16 +23,22 @@ namespace FortuneTeller.UI.Services
         }
 
         public FortuneServiceClient(
+            
+        HttpClient httpClient,
             IOptions<FortuneServiceOptions> config, 
             ILogger<FortuneServiceClient> logger)
         {
             _logger = logger;
             _config = config;
+            _httpClient = httpClient;
+
         }
 
         public async Task<List<Fortune>> AllFortunesAsync()
         {
-            return await Task.FromResult(new List<Fortune>() { new Fortune() { Id = 1, Text = "I need to be wired up!" } });
+            var content =  await _httpClient.GetStringAsync(Config.AllFortunesURL);
+            _logger.LogTrace("Tracing some info");
+            return JsonConvert.DeserializeObject<List<Fortune>>(content);
         }
 
         public async Task<Fortune> RandomFortuneAsync()

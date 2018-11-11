@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using FortuneTeller.Service.Models;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,8 +21,11 @@ namespace FortuneTeller.Service
         public void ConfigureServices(IServiceCollection services)
         {
             services
+                .AddDbContext<FortuneContext>(options=> options.UseInMemoryDatabase())
+                .AddScoped<IFortuneRepository,FortuneRepository>()
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+             
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -30,8 +35,12 @@ namespace FortuneTeller.Service
             {
                 app.UseDeveloperExceptionPage();
             }
+           // var context = app.ApplicationServices.GetService<FortuneContext>();
+            //AddTestData(context);
 
             app.UseMvc();
         }
+
+        
     }
 }
