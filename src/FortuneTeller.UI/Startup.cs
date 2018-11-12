@@ -1,3 +1,4 @@
+using System;
 using FortuneTeller.UI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pivotal.Discovery.Client;
 using Steeltoe.Common.Discovery;
+using Steeltoe.Common.Http.Discovery;
 using Steeltoe.Discovery.Eureka;
 using Steeltoe.Extensions.Configuration.CloudFoundry;
 
@@ -32,9 +34,13 @@ namespace FortuneTeller.UI
             });
 
             services.Configure<FortuneServiceOptions>(Configuration.GetSection("fortuneService"));
-            services.AddScoped<IDiscoveryClient, EurekaDiscoveryClient>();
-            services.AddHttpClient<IFortuneService, FortuneServiceClient>();
+         //   services.AddScoped<IDiscoveryClient, EurekaDiscoveryClient>();
             services.AddScoped<IFortuneService, FortuneServiceClient>();
+            services.AddTransient<DiscoveryHttpMessageHandler>();
+            services.AddHttpClient("fortunes", c => { c.BaseAddress = new Uri("http://fortuneService/api/fortunes/"); })
+                .AddHttpMessageHandler<DiscoveryHttpMessageHandler>()
+                .AddTypedClient<IFortuneService, FortuneServiceClient>();
+
 
            
 

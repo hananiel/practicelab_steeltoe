@@ -14,8 +14,8 @@ namespace FortuneTeller.UI.Services
     {
         private readonly ILogger<FortuneServiceClient> _logger;
         private IOptions<FortuneServiceOptions> _config;
-       // private HttpClient _httpClient;
-        private DiscoveryHttpClientHandler _handler;
+        private HttpClient _httpClient;
+       // private DiscoveryHttpClientHandler _handler;
 
         private FortuneServiceOptions Config
         {
@@ -26,25 +26,25 @@ namespace FortuneTeller.UI.Services
         }
 
         public FortuneServiceClient(
-            IDiscoveryClient client,
+            HttpClient httpClient,
             IOptions<FortuneServiceOptions> config, 
             ILogger<FortuneServiceClient> logger
          )
         {
             _logger = logger;
             _config = config;
-           // _httpClient = httpClient;
-            _handler = new DiscoveryHttpClientHandler(client);
+            _httpClient = httpClient;
+          //  _handler = new DiscoveryHttpClientHandler(client);
             
-            Console.WriteLine(client);
+          
 
         }
 
         public async Task<List<Fortune>> AllFortunesAsync()
         {
            //Console.WriteLine(Config.AllFortunesURL);
-            var httpClient = new HttpClient(_handler, false);
-            var content =  await httpClient.GetStringAsync("http://fortuneService/api/fortunes/all" );
+          //  var httpClient = new HttpClient(_handler, false);
+            var content =  await _httpClient.GetStringAsync("all" );
 //           
             return JsonConvert.DeserializeObject<List<Fortune>>(content);
            // return new List<Fortune> {new Fortune() {Id = 1, Text = "testing"}};
