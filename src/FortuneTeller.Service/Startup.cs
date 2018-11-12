@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Pivotal.Discovery.Client;
 
 namespace FortuneTeller.Service
 {
@@ -20,11 +21,15 @@ namespace FortuneTeller.Service
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+          //  new Steeltoe.Discovery.Eureka.DiscoveryClient()
             services
-                .AddDbContext<FortuneContext>(options=> options.UseInMemoryDatabase())
+                .AddDbContext<FortuneContext>(options=> options.UseInMemoryDatabase("my_database"))
                 .AddScoped<IFortuneRepository,FortuneRepository>()
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddDiscoveryClient(Configuration);
+            
+          
              
         }
 
@@ -35,8 +40,8 @@ namespace FortuneTeller.Service
             {
                 app.UseDeveloperExceptionPage();
             }
-           // var context = app.ApplicationServices.GetService<FortuneContext>();
-            //AddTestData(context);
+
+            app.UseDiscoveryClient();
 
             app.UseMvc();
         }

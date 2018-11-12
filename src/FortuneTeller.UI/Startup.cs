@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Pivotal.Discovery.Client;
+using Steeltoe.Common.Discovery;
+using Steeltoe.Discovery.Eureka;
 using Steeltoe.Extensions.Configuration.CloudFoundry;
 
 namespace FortuneTeller.UI
@@ -29,8 +32,10 @@ namespace FortuneTeller.UI
             });
 
             services.Configure<FortuneServiceOptions>(Configuration.GetSection("fortuneService"));
-            services.AddScoped<IFortuneService, FortuneServiceClient>();
+            services.AddScoped<IDiscoveryClient, EurekaDiscoveryClient>();
             services.AddHttpClient<IFortuneService, FortuneServiceClient>();
+            services.AddScoped<IFortuneService, FortuneServiceClient>();
+
            
 
             services.AddDistributedMemoryCache();
@@ -40,6 +45,7 @@ namespace FortuneTeller.UI
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddOptions();
             services.ConfigureCloudFoundryOptions(Configuration);
+            services.AddDiscoveryClient(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -59,6 +65,7 @@ namespace FortuneTeller.UI
             app.UseCookiePolicy();
 
             app.UseMvc();
+            app.UseDiscoveryClient();
         }
     }
 }

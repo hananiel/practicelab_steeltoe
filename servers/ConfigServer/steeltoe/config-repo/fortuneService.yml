@@ -1,2 +1,8 @@
----
+eureka:
+  client:
+    shouldRegisterWithEureka: true
+    serviceUrl: http://localhost:8761/eureka/
+    validate_certificates: false
+    shouldFetchRegistry: false
+eureka.instance.port:5001
 AllowedHosts: "*"

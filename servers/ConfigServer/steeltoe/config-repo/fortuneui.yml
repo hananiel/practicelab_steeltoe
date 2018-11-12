@@ -1,3 +1,11 @@
+eureka:
+  client:
+    shouldRegisterWithEureka: true
+    serviceUrl: http://localhost:8761/eureka/
+    validate_certificates: false
+    shouldFetchRegistry: true
+  instance:
+    port:5000
 ---
 AllowedHosts: "*"
 fortuneService:
