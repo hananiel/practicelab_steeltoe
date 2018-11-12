@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Steeltoe.Extensions.Configuration.CloudFoundry;
 
 namespace FortuneTeller.UI
 {
@@ -37,6 +38,8 @@ namespace FortuneTeller.UI
             services
                 .AddMvc()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddOptions();
+            services.ConfigureCloudFoundryOptions(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

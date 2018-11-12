@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Threading.Tasks;
 using FortuneTeller.Service.Models;
+using Steeltoe.Extensions.Configuration.ConfigServer;
 
 namespace FortuneTeller.Service
 {
@@ -51,6 +52,8 @@ namespace FortuneTeller.Service
                         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                         .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
                         .AddEnvironmentVariables();
+                    
+                    config.AddConfigServer();
 
                     if (args != null)
                     {

@@ -36,7 +36,9 @@ namespace FortuneTeller.Service.Controllers
         public async Task<Fortune> RandomFortuneAsync()
         {
             _logger?.LogTrace("RandomFortuneAsync");
-            return (await AllFortunesAsync())[0];
+            var i = new Random().Next(0,49);
+              
+            return (await AllFortunesAsync())[i];
         }
     }
 }

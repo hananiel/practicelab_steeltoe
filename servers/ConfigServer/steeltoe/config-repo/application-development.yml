@@ -1,0 +1,11 @@
+Logging:
+  IncludeScopes: true
+  LogLevel:
+    Default: Trace
+    FortuneTeller.UI: Trace
+  Debug:
+    LogLevel:
+      Default: Information
+  Console:
+    LogLevel:
+      Default: Trace

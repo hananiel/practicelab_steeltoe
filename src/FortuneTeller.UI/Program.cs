@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System.IO;
+using Steeltoe.Extensions.Configuration.CloudFoundry;
+using Steeltoe.Extensions.Configuration.ConfigServer;
 
 namespace FortuneTeller.UI
 {
@@ -23,8 +25,10 @@ namespace FortuneTeller.UI
 
                     config
                         .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-                        .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                        .AddEnvironmentVariables();
+                       // .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+                        .AddEnvironmentVariables()
+                        .AddCloudFoundry();
+                    config.AddConfigServer();
 
                     if (args != null)
                     {

@@ -1,0 +1,8 @@
+---
+AllowedHosts: "*"
+fortuneService:
+  randomFortunePath: random
+  allFortunesPath: all
+  scheme: http
+  BaseAddress: localhost:5001/api/fortunes/
+

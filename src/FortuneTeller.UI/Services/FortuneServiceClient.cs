@@ -36,8 +36,9 @@ namespace FortuneTeller.UI.Services
 
         public async Task<List<Fortune>> AllFortunesAsync()
         {
+            Console.WriteLine(Config.AllFortunesURL);
             var content =  await _httpClient.GetStringAsync(Config.AllFortunesURL);
-            _logger.LogTrace("Tracing some info");
+           
             return JsonConvert.DeserializeObject<List<Fortune>>(content);
         }
 
