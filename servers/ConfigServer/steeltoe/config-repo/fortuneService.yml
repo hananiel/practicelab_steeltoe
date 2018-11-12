@@ -2,4 +2,8 @@ eureka:
   client:
     shouldFetchRegistry: false
   instance:
+    name: fortuneService
     port: 5001
+sqlServer:
+  credentials:
+    connectionString: "Server=localhost;Database=fortuneService;User Id=SA;Password=St33lt03R0cks"
