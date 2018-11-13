@@ -21,7 +21,7 @@ namespace FortuneTeller.UI.Pages
         public async Task OnGet()
         {
             var fortune = await _fortunes.RandomFortuneAsync();
-            Message = fortune.Text;
+            Message = fortune?.Text;
             HttpContext.Session.Set("MyFortune", Encoding.ASCII.GetBytes(Message));
         }
     }

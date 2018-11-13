@@ -35,6 +35,23 @@ namespace FortuneTeller.UI
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services
+                .AddAuthentication((options) =>
+                {
+                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = CloudFoundryDefaults.AuthenticationScheme;
+                })
+                .AddCookie((options) => 
+                {
+                    options.AccessDeniedPath = new PathString("/Error");
+                })
+                .AddCloudFoundryOAuth(Configuration);
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("fortunes.read", policy => policy.RequireClaim("scope", "fortunes.read"));
+            });
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddTransient<DiscoveryHttpMessageHandler>();
             services.AddDiscoveryClient(Configuration);
             services.Configure<FortuneServiceOptions>(Configuration.GetSection("fortuneService"));
@@ -50,19 +67,6 @@ namespace FortuneTeller.UI
 
             services.AddHystrixCommand<FortuneServiceCommand>("FortuneService", Configuration);
             services.AddHystrixMetricsStream(Configuration);
-            services.AddAuthentication((options) =>
-                {
-                    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                    options.DefaultChallengeScheme = CloudFoundryDefaults.AuthenticationScheme;
-                })
-                .AddCookie((options) => { options.AccessDeniedPath = new PathString("/Error"); }
-                )
-                .AddCloudFoundryOAuth(Configuration);
-            services.AddAuthorization(options =>
-            {
-                options.AddPolicy("fortunes.read", policy => policy.RequireClaim("scope", "fortunes.read"));
-            });
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddSession();
             services
@@ -89,8 +93,6 @@ namespace FortuneTeller.UI
             app.UseStaticFiles();
             app.UseSession();
             app.UseCookiePolicy();
-            
-
             app.UseAuthentication();
             app.UseMvc(routes =>
             {

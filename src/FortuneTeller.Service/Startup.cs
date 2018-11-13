@@ -50,9 +50,9 @@ namespace FortuneTeller.Service
             }
 
             app.UseDiscoveryClient();
+            app.UseAuthentication();
 
             app.UseMvc();
-            app.UseAuthentication();
         }
     }
 }

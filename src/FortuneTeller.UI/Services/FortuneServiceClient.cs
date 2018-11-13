@@ -53,9 +53,9 @@ namespace FortuneTeller.UI.Services
 
         public async Task<Fortune> RandomFortuneAsync()
         {   
-            var authenticatedClient = await GetAuthenticatedClient();
-            var response = await authenticatedClient.GetAsync(Config.RandomFortuneURL);
-            return await response.Content.ReadAsAsync<Fortune>();
+           // var authenticatedClient = await GetAuthenticatedClient();
+            //var response = await authenticatedClient.GetAsync(Config.RandomFortuneURL);
+            return  AllFortunesAsync().Result[0];
         }
     }
 }

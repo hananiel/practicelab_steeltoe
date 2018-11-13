@@ -1,4 +1,5 @@
-﻿using FortuneTeller.Service.Models;
+﻿using System;
+using FortuneTeller.Service.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
@@ -10,7 +11,7 @@ namespace FortuneTeller.Service.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Policy = "fortunes.read")]
+    [Authorize(policy: "fortunes.read")]
     public class FortunesController : ControllerBase
     {
         private readonly ILogger<FortunesController> _logger;
@@ -26,6 +27,7 @@ namespace FortuneTeller.Service.Controllers
         [HttpGet("all")]
         public async Task<List<Fortune>> AllFortunesAsync()
         {
+            Console.WriteLine("getting fortunes");
             _logger?.LogTrace("AllFortunesAsync");
             var entities = await _fortunes.GetAllAsync();
             return entities
@@ -41,6 +43,5 @@ namespace FortuneTeller.Service.Controllers
             var fortuneEntity = await _fortunes.RandomFortuneAsync();
             return new Fortune { Id = fortuneEntity.Id, Text = fortuneEntity.Text };
         }
-
     }
 }
