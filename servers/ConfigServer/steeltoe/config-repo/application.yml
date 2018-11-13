@@ -1,4 +1,12 @@
 ---
+security:
+  oauth2:
+    client:
+      authorizationEndpoint: "http://localhost:8080/uaa/oauth/authorize"
+      tokenEndpoint: "http://localhost:8080/uaa/oauth/token"
+      tokenInfoUrl: "http://localhost:8080/uaa/check_token"
+      userInformationEndpoint: "http://localhost:8080/uaa/userinfo"
+      jwtKeyUrl: "http://localhost:8080/uaa/token_keys"
 Logging:
   IncludeScopes: true
   Debug:

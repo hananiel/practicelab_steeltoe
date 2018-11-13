@@ -1,12 +1,16 @@
 ﻿using FortuneTeller.Service.Models;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Steeltoe.CloudFoundry.Connector.SqlServer.EFCore;
 using Steeltoe.Discovery.Client;
+using Steeltoe.Security.Authentication.CloudFoundry;
 
 namespace FortuneTeller.Service
 {
@@ -25,6 +29,12 @@ namespace FortuneTeller.Service
             services.AddDbContext<FortuneContext>(options => options.UseSqlServer(Configuration));
             services.AddScoped<IFortuneRepository, FortuneRepository>();
             services.AddDiscoveryClient(Configuration);
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddCloudFoundryJwtBearer(Configuration);
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("fortunes.read", policy => policy.RequireClaim("scope", "fortunes.read"));
+            });
 
             services
                 .AddMvc()
@@ -42,6 +52,7 @@ namespace FortuneTeller.Service
             app.UseDiscoveryClient();
 
             app.UseMvc();
+            app.UseAuthentication();
         }
     }
 }

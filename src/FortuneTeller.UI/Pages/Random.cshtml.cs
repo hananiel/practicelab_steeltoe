@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FortuneTeller.UI.Pages
 {
+    [Authorize(Policy = "fortunes.read")]
     public class RandomModel : PageModel
     {
         public string Message { get; private set; } = "Hello from FortuneTellerUI!";

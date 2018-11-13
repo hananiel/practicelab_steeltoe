@@ -1,4 +1,9 @@
 ---
+security:
+  oauth2:
+    client:
+      clientId: fortuneui
+      clientSecret: fortunesui_secret
 eureka:
   client:
     shouldRegisterWithEureka: false
